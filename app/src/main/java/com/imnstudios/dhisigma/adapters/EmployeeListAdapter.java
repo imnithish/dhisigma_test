@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -93,21 +94,14 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
         return employeeArrayList.size();
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
 
-    @Override
-    public int getItemViewType(int position) {
-        return position;
-    }
 
     public static class Holder extends RecyclerView.ViewHolder {
         private TextView employeeCode;
         private TextView employeeName;
         private ImageView employeeImage;
         private ImageView delete;
+        private RelativeLayout container;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
@@ -115,6 +109,7 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
             this.employeeName = itemView.findViewById(R.id.employee_name);
             this.employeeImage = itemView.findViewById(R.id.employee_image);
             this.delete = itemView.findViewById(R.id.delete);
+            this.container = itemView.findViewById(R.id.container);
 
         }
     }

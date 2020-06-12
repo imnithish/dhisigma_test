@@ -3,6 +3,7 @@ package com.imnstudios.dhisigma;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +25,8 @@ import com.imnstudios.dhisigma.adapters.EmployeeListAdapter;
 import com.imnstudios.dhisigma.models.EmployeeModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -64,31 +67,50 @@ public class MainActivity extends AppCompatActivity {
 
         //init recyclerView
         employeeListView.setLayoutManager(new LinearLayoutManager(this));
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(dragCallback);
+        itemTouchHelper.attachToRecyclerView(employeeListView);
 
         //sorting
+
         sortUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!searchFlag) {
-                    employeeList.clear();
-                    startPopulatingInAsc();
-                } else {
-                    searchEmployeeAsc();
+                if (flag) {
+                    if (!searchFlag) {
+                        sortUp.setEnabled(false);
+                        progressBar.setVisibility(View.VISIBLE);
+                        employeeList.clear();
+                        startPopulatingInAsc();
+                    } else {
+                        progressBar.setVisibility(View.VISIBLE);
+                        sortUp.setEnabled(false);
+                        employeeList.clear();
+                        searchEmployeeAsc();
+                    }
                 }
             }
         });
+
 
         sortDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!searchFlag) {
-                    employeeList.clear();
-                    startPopulatingInDesc();
-                } else {
-                    searchEmployeeDesc();
+                if (flag) {
+                    if (!searchFlag) {
+                        progressBar.setVisibility(View.VISIBLE);
+                        sortDown.setEnabled(false);
+                        employeeList.clear();
+                        startPopulatingInDesc();
+                    } else {
+                        progressBar.setVisibility(View.VISIBLE);
+                        sortDown.setEnabled(false);
+                        employeeList.clear();
+                        searchEmployeeDesc();
+                    }
                 }
             }
         });
+
 
         //search
         searchView.setOnQueryTextListener(searchQueryListener);
@@ -103,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 searchView.clearFocus();
                 employeeList.clear();
                 searchFlag = false;
+                progressBar.setVisibility(View.VISIBLE);
                 startPopulatingInAsc();
                 searchView.setQuery("", false);
             }
@@ -132,9 +155,9 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void searchEmployeeAsc() {
-        employeeList.clear();
+        progressBar.setVisibility(View.VISIBLE);
         Log.d(TAG, " Searching in ASC");
-        mDatabase.orderByChild("employeeCode").addValueEventListener(new ValueEventListener() {
+        mDatabase.orderByChild("employeeCode").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 employeeList = new ArrayList<>();
@@ -146,21 +169,23 @@ public class MainActivity extends AppCompatActivity {
                         employeeList.add(employee);
                     Log.d(TAG, " Searching ASC Success");
                 }
-
                 setAdapter();
+                sortUp.setEnabled(true);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d(TAG, " Searching ASC Error: " + databaseError.toString());
+                progressBar.setVisibility(View.INVISIBLE);
+                sortUp.setEnabled(true);
             }
         });
     }
 
     private void searchEmployeeDesc() {
-        employeeList.clear();
+
         Log.d(TAG, " Searching in Desc");
-        mDatabase.orderByChild("employeeCodeDesc").addValueEventListener(new ValueEventListener() {
+        mDatabase.orderByChild("employeeCodeDesc").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 employeeList = new ArrayList<>();
@@ -172,20 +197,22 @@ public class MainActivity extends AppCompatActivity {
                         employeeList.add(employee);
                     Log.d(TAG, " Searching Desc Success");
                 }
-
                 setAdapter();
+                sortDown.setEnabled(true);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d(TAG, " Searching Desc Error: " + databaseError.toString());
+                sortDown.setEnabled(true);
+                progressBar.setVisibility(View.INVISIBLE);
             }
         });
     }
 
     private void startPopulatingInDesc() {
         Log.d(TAG, " Populating in DESC");
-        mDatabase.orderByChild("employeeCodeDesc").addValueEventListener(new ValueEventListener() {
+        mDatabase.orderByChild("employeeCodeDesc").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 employeeList = new ArrayList<>();
@@ -195,18 +222,22 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, " DESC Success");
                 }
                 setAdapter();
+                sortDown.setEnabled(true);
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d(TAG, " DESC Error: " + databaseError.toString());
+                sortDown.setEnabled(true);
+                progressBar.setVisibility(View.INVISIBLE);
             }
         });
     }
 
     private void startPopulatingInAsc() {
         Log.d(TAG, " Populating in ASC");
-        mDatabase.orderByChild("employeeCode").addValueEventListener(new ValueEventListener() {
+        mDatabase.orderByChild("employeeCode").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 employeeList = new ArrayList<>();
@@ -216,11 +247,14 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, " ASC Success");
                 }
                 setAdapter();
+                sortUp.setEnabled(true);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d(TAG, " ASC Error: " + databaseError.toString());
+                sortUp.setEnabled(true);
+                progressBar.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -237,4 +271,22 @@ public class MainActivity extends AppCompatActivity {
         employeeListView.setAdapter(employeeListAdapter);
         progressBar.setVisibility(View.INVISIBLE);
     }
+
+    ItemTouchHelper.SimpleCallback dragCallback =
+            new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END, 0) {
+                @Override
+                public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+
+                    int fromPosition = viewHolder.getAdapterPosition();
+                    int toPosition = target.getAdapterPosition();
+                    Collections.swap(employeeList, fromPosition, toPosition);
+                    recyclerView.getAdapter().notifyItemMoved(fromPosition, toPosition);
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+                }
+            };
 }
