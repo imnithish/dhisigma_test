@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="5sp"
+    android:layout_marginTop="5sp"
+    android:layout_marginEnd="5sp"
+    android:background="@drawable/background"
+    android:padding="10sp">
+
+    <ImageView
+        android:id="@+id/employee_image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/defaultprofilepicture" />
+
+    <LinearLayout
+        android:id="@+id/ll_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="40sp"
+        android:layout_toEndOf="@id/employee_image"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/employee_code"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="employee code"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/employee_name"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4sp"
+            android:text="employee name"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/delete"
+        android:layout_width="30sp"
+        android:layout_height="30sp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/delete" />
+
+
+</RelativeLayout>

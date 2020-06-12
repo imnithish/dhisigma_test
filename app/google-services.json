@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1066382169966",
+    "firebase_url": "https://dhi-sigma.firebaseio.com",
+    "project_id": "dhi-sigma",
+    "storage_bucket": "dhi-sigma.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1066382169966:android:a1790ce190f6ab94e0137f",
+        "android_client_info": {
+          "package_name": "com.imnstudios.dhisigma"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1066382169966-gm5m9jd077g12vnt9g64pr50lsv3ro8e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYUl4bqFOc5F_Ybz31QZWHLwRdqXf-cBo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1066382169966-gm5m9jd077g12vnt9g64pr50lsv3ro8e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
